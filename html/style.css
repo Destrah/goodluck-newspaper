@@ -201,6 +201,7 @@ nav > a:hover {
 	white-space: nowrap;
 	min-height: 50%;
 	width: 100%;
+    table-layout: fixed;
 }
 
 .columnrow {
@@ -218,6 +219,7 @@ nav > a:hover {
     transition: all .7s;
 	height: 100%;
 	white-space: normal;
+    word-wrap: break-word;
 }
 
 .collumn.twowide{
@@ -229,6 +231,8 @@ nav > a:hover {
     vertical-align: top;
     transition: all .7s;
 	height: 100%;
+	white-space: normal;
+    word-wrap: break-word;
 }
 
 .collumn + .collumn { 
