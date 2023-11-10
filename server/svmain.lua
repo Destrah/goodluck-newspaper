@@ -19,7 +19,7 @@ Citizen.CreateThread(function()
 	end)
 	secretCodeLastChanged = os.time()
 	for i = 1, 4, 1 do 
-		local secretCode = tostring(QBCore.Shared.RandomInt(math.random(4, 6)))
+		local secretCode = tostring(QBCore.Shared.RandomInt(4))
 		local secretCodeScrambled = ""
 		for i = 1, #secretCode, 1 do
 			digitsDisplayed[i] = false
