@@ -402,7 +402,7 @@ nav > a:hover {
 	font-style: italic;
 	font-size: 12px;
 }
-img {
+.collumn img {
     -webkit-filter: sepia(80%) contrast(1) opacity(0.8);
     filter: sepia(80%) grayscale(1) contrast(1) opacity(0.8);
     mix-blend-mode: multiply;
