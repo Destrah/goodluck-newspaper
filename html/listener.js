@@ -310,7 +310,7 @@ document.onkeydown = function (data) {
             $('.popupclass').html("");
             up = false
 		} else {
-			$.post('https://erp-newspaper/close', JSON.stringify({}));
+			$.post('https://goodluck-newspaper/close', JSON.stringify({}));
 		}
 	}
 };
@@ -335,7 +335,7 @@ $(document).on('click', '.submit-button', function(e){
 		notify: 'Article #' + (Number(option) + 1) + " updated",
 		type: 'success',
 	}));
-	$.post('https://erp-newspaper/updateArticles', JSON.stringify({
+	$.post('https://goodluck-newspaper/updateArticles', JSON.stringify({
 		article: {
 			article: (Number(option) + 1),
 			title: title,
