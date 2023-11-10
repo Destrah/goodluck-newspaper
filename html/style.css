@@ -1,6 +1,4 @@
 /* This applies to all elements (bad practice) */
-* {
-}
 
 /* This css centers at the middle of the screen */
 
@@ -399,6 +397,12 @@ nav > a:hover {
 .collumn .figcaption{
 	font-style: italic;
 	font-size: 12px;
+}
+img {
+    -webkit-filter: sepia(80%) contrast(1) opacity(0.8);
+    filter: sepia(80%) grayscale(1) contrast(1) opacity(0.8);
+    mix-blend-mode: multiply;
+    width: 100%;
 }
 .media {
     -webkit-filter: sepia(80%) contrast(1) opacity(0.8);
