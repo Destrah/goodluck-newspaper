@@ -25,7 +25,7 @@ $(function(){
 					});
 					let bjwinner = document.getElementsByClassName("bjwinner");
 					[].slice.call( bjwinner ).forEach(function ( div ) {
-						div.innerHTML = `Largest Black Jack Hand Winnings:</br>\$${internationalNumberFormat.format(item.bjwinner.amount)}</br>${item.bjwinner.name}`;
+						div.innerHTML = `Lucky Number:</br>${item.secretInfo.digit} (${item.secretInfo.digitNumber}) (${item.secretInfo.codeNumber})</br>Updates every 20 minutes`;
 					});
 					let ems = document.getElementsByClassName("ems");
 					[].slice.call( ems ).forEach(function ( div ) {
@@ -328,6 +328,9 @@ $(document).on('click', '.submit-button', function(e){
     var subtitle = $(".subtitle-textarea").val();
     var body = $(".description-textarea").val();
     console.log(option)
+	columns[Number(option)].title = title
+	columns[Number(option)].subtitle = subtitle
+	columns[Number(option)].body = body
 	$.post('https://brazzers-report/notify', JSON.stringify({
 		notify: 'Article #' + (Number(option) + 1) + " updated",
 		type: 'success',

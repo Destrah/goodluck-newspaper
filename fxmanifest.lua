@@ -12,14 +12,10 @@ ui_page 'html/index.html'
 
 server_script {
     '@mysql-async/lib/MySQL.lua',
---    '@es_extended/locale.lua', -- Comment in if using ESX
-    'config.lua',
     'server/svmain.lua'
 }
 
 client_scripts {
---	'@es_extended/locale.lua', -- Comment in if using ESX
-    'config.lua',
     'client/main.lua'
 } 
 
@@ -30,6 +26,11 @@ files {
     'html/listener.js',
     'html/newspaper.png',
     'html/mugshot.jpg'
+}
+
+shared_scripts {
+	'config.lua',
+    '@ox_lib/init.lua',
 }
 
 lua54 'yes'

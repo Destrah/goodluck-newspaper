@@ -2,13 +2,39 @@ QBCore = exports['qb-core']:GetCoreObject()
 local connectedPlayers = {}
 local debugprint, arrester1, arrester2, arrester3 = false, true, false, false
 local weazelNewsAccount = ""
+local secretCodes = {}
+local secretCodesScrambled = {}
+local claimedCodes = {}
+local secretCodeLastChanged = 0
+local currentSecretCodePos = 1
+local currentSecretDigitPos = 1
+local digitsDisplayed = {}
 newspaperaccessed = {}
+luckyNumberTries = {}
 Citizen.CreateThread(function()
 	while QBCore == nil do QBCore = exports['qb-core']:GetCoreObject() Citizen.Wait(10); end; 
 	
 	exports.oxmysql:single('SELECT `name` FROM player_business_accounts WHERE label = "Weazel News";', {}, function(result)
 		weazelNewsAccount = result.name
 	end)
+	secretCodeLastChanged = os.time()
+	for i = 1, 4, 1 do 
+		local secretCode = tostring(QBCore.Shared.RandomInt(math.random(4, 6)))
+		local secretCodeScrambled = ""
+		for i = 1, #secretCode, 1 do
+			digitsDisplayed[i] = false
+		end
+		for i = 1, #secretCode, 1 do
+			local digitPos = math.random(1, #secretCode)
+			while digitsDisplayed[digitPos] do
+				digitPos = math.random(1, #secretCode)
+			end
+			digitsDisplayed[digitPos] = true
+			secretCodeScrambled = secretCodeScrambled .. string.sub(secretCode, digitPos, digitPos)
+		end
+		table.insert(secretCodes, secretCode)
+		table.insert(secretCodesScrambled, secretCodeScrambled)
+	end
 end)
 
 RegisterNetEvent("newspaper:jail")
@@ -100,15 +126,93 @@ AddEventHandler("newspaper:open", function()
 						end
 						table.insert(warrantData, {charges = charges, name = name, date = date, picture = warrants[i].picture})
 					end
-					TriggerClientEvent("newspaper:open", _source, result, arrestData, connectedPlayers, {name = "Under Construction", amount = 0}, warrantData, motd.message)
+					if (os.time() - secretCodeLastChanged) >= 1200 then
+						local addition = math.floor((os.time() - secretCodeLastChanged) / 1200)
+						for i = 1, addition, 1 do
+							if currentSecretDigitPos == #secretCodesScrambled[currentSecretCodePos] then
+								if currentSecretCodePos == #secretCodesScrambled then
+									currentSecretCodePos = 1
+								else
+									currentSecretCodePos += 1
+								end
+								currentSecretDigitPos = 0
+							else
+								currentSecretDigitPos += 1
+							end
+						end
+					end
+					TriggerClientEvent("newspaper:open", _source, result, arrestData, connectedPlayers, {name = "Under Construction", amount = 0}, warrantData, motd.message, {digit = string.sub(secretCodesScrambled[currentSecretCodePos], currentSecretDigitPos, currentSecretDigitPos), digitNumber = currentSecretDigitPos, codeNumber = currentSecretCodePos})
 				end)
 			end)
 		end)
 	end)
 	if newspaperaccessed[xPlayer.PlayerData.citizenid] == nil or (os.time() - newspaperaccessed[xPlayer.PlayerData.citizenid]) > 300 then
 		exports['brazzers-banking']:calculateBusinessFund(_source, weazelNewsAccount, 10, 100, "services", "Used Newspaper Stand", "Used Newspaper Stand")
+		newspaperaccessed[xPlayer.PlayerData.citizenid] = os.time()
 	end
-	newspaperaccessed[xPlayer.PlayerData.citizenid] = os.time()
+end)
+
+RegisterNetEvent("newspaper-sv:TryLuckyNumber", function()
+	local _source = source
+	TriggerClientEvent("newspaper-cl:TryLuckyNumber", _source)
+end)
+
+local lootTable = {
+    ["fishingrod"] = {300, {[1] = 50, [2] = 40, [3] = 30}},
+    ["lawnmower"] = {200, {[1] = 1}},
+    ["miningdrill"] = {300, {[1] = 50, [2] = 40, [3] = 30}},
+    ["radio"] = {200, {[1] = 50, [2] = 40, [3] = 30}},
+    ["nvg"] = {100, {[1] = 50, [2] = 15}},
+}
+
+RegisterNetEvent("newspaper-sv:CheckLuckyNumber", function(luckyNumber)
+	local _source = source
+	local xPlayer = QBCore.Functions.GetPlayer(_source)
+	if luckyNumberTries[xPlayer.PlayerData.citizenid] == nil or (os.time() - luckyNumberTries[xPlayer.PlayerData.citizenid]) > 300 then
+		luckyNumberTries[xPlayer.PlayerData.citizenid] = os.time()
+		local codeFound = false
+		for i = 1, #secretCodes, 1 do
+			if luckyNumber == secretCodes[i] then
+				if claimedCodes[secretCodes[i]] == nil then
+					local weight = 0
+					for _, data in pairs(lootTable) do
+						weight += data[1]
+					end
+					local choice = math.random(1, weight)
+					for item, data in pairs(lootTable) do
+						weight -= data[1]
+						if choice > weight then
+							local weightAmount = 0
+							for _, dataAmount in pairs(lootTable[item][2]) do
+								weightAmount += dataAmount
+							end
+							local choiceAmount = math.random(1, weightAmount)
+							for amount, dataAmount in pairs(lootTable[item][2]) do
+								weightAmount -= dataAmount
+								if choiceAmount > weightAmount then
+									exports.ox_inventory:AddItem(_source, item, amount)
+									break
+								end
+							end
+							break
+						end
+					end
+					claimedCodes[secretCodes[i]] = true
+					codeFound = true
+					QBCore.Functions.Notify(_source, "Code redeemed", "success")
+					break
+				else
+					QBCore.Functions.Notify(_source, "Code already claimed", "error")
+				end
+			end
+		end
+		if not codeFound then
+			QBCore.Functions.Notify(_source, "Code not correct", "error")
+		end
+	else
+		--Let them know they can only try once every 5 minutes
+		QBCore.Functions.Notify(_source, "You can only attempt once every 5 minutes", "error")
+	end
 end)
 
 AddEventHandler('QBCore:Server:OnJobUpdate', function(playerId, job, lastjob)

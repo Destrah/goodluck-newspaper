@@ -122,7 +122,7 @@ AddEventHandler("newspaper:on", function(value)
 end)
 
 RegisterNetEvent("newspaper:open")
-AddEventHandler("newspaper:open", function(columns, arrests, connectedPlayers, bjwinner, warrants, motd)
+AddEventHandler("newspaper:open", function(columns, arrests, connectedPlayers, bjwinner, warrants, motd, secretInfo)
     ExecuteCommand("e newspaper3")
 	local ems, police, avocat, mechanic, cardealer, estate, towtruck, pizza, burgershot, tuner, reporter, uwu, players = 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	local citizenid = QBCore.Functions.GetPlayerData().citizenid
@@ -187,7 +187,8 @@ AddEventHandler("newspaper:open", function(columns, arrests, connectedPlayers, b
         population = population,
         bjwinner = bjwinner,
         warrants = warrants,
-        motd = motd
+        motd = motd,
+        secretInfo = secretInfo
 
     })
     toggleDisplay = false
@@ -220,6 +221,16 @@ end)
 
 RegisterNUICallback("updateArticles", function(data, cb)
     TriggerServerEvent("newspaper-sv:updateArticles", data.article)
+end)
+
+RegisterNetEvent("newspaper-cl:TryLuckyNumber", function()
+    local input = lib.inputDialog('Try The Lucky Code', {
+        {type = "input", label = "Code", required = true, min = 4}
+    })
+    if input ~= nil then
+        local code = input[1]
+        TriggerServerEvent("newspaper-sv:CheckLuckyNumber",code)
+    end
 end)
 
 CreateThread(function()
