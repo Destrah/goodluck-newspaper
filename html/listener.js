@@ -250,9 +250,10 @@ $(function(){
 			} else if (item !== undefined && item.type === "article") {
 				console.log("Check1")
 				columns = item.columns;
-				$(".title-textarea").val(item.columns[0].title);
-				$(".subtitle-textarea").val(item.columns[0].subtitle);
-				$(".description-textarea").val(item.columns[0].body);
+				var option = $('.articleSelect option:selected').val();
+				$(".title-textarea").val(item.columns[Number(option)].title);
+				$(".subtitle-textarea").val(item.columns[Number(option)].subtitle);
+				$(".description-textarea").val(item.columns[Number(option)].body);
 				$(".articleManager").fadeIn(100)
 				$("#container").css("display", "none")
 			}
