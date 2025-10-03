@@ -16,6 +16,10 @@
 	transform: translate(-50%, -50%);
 }
 
+#liveNews {
+    display: none;
+}
+
 .motd {
     font-weight: bold;
 }
@@ -27,6 +31,33 @@
 a {
     pointer-events: none;
 }
+
+iframe {
+    aspect-ratio: 16 / 9;
+    width: 100%; /* change this to a fixed width, or create a container with a width. */
+    height: 100%;
+    pointer-events: none;
+    -webkit-filter: grayscale(100%);
+    -moz-filter: grayscale(100%);
+    -ms-filter: grayscale(100%);
+    -o-filter: grayscale(100%);
+    filter: grayscale(100%);
+    .ytplayer {pointer-events: none;}
+}
+
+#liveNews iframe {
+    aspect-ratio: 16 / 9;
+    width: 100%; /* change this to a fixed width, or create a container with a width. */
+    height: 100%;
+    pointer-events: none;
+    -webkit-filter: grayscale(0%);
+    -moz-filter: grayscale(0%);
+    -ms-filter: grayscale(0%);
+    -o-filter: grayscale(0%);
+    filter: grayscale(0%);
+    .ytplayer {pointer-events: none;}
+}
+
 p{
     margin-top: 0;
     margin-bottom: 20px;
@@ -187,6 +218,24 @@ nav > a:hover {
     margin-right: 30px;
 }
 
+.live{
+    font-size: 0;
+    line-height: 0;
+    word-spacing: -.31em;
+    display: block;
+    margin: auto;
+    padding-top: 2%;
+    padding-bottom: 2%;
+	width: 96%;
+}
+
+#liveStream {
+    max-width: 85%;
+    aspect-ratio: 16 / 9;
+    margin: auto;
+    display: block;
+}
+
 .content{
     font-size: 0;
     line-height: 0;
@@ -214,6 +263,7 @@ nav > a:hover {
     line-height: 20px;
     width: 17.5%;
     display: table-cell;
+    position: relative;
     padding: 0 1% 0 1%;
     vertical-align: top;
     transition: all .7s;
@@ -227,6 +277,7 @@ nav > a:hover {
     line-height: 20px;
     width: 35%;
     display: table-cell;
+    position: relative;
     padding: 0 1% 0 1%;
     vertical-align: top;
     transition: all .7s;

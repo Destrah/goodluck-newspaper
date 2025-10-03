@@ -17,13 +17,13 @@
 -- Dumping structure for table maindata.newspaper
 CREATE TABLE IF NOT EXISTS `newspaper` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
-  `subtitle` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
-  `body` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin,
+  `title` varchar(255) CHARACTER SET utf8mb4 DEFAULT NULL,
+  `subtitle` varchar(255) CHARACTER SET utf8mb4 DEFAULT NULL,
+  `body` longtext CHARACTER SET utf8mb4,
   `titletype` int DEFAULT NULL,
   `subtitletype` int DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 -- Dumping data for table maindata.newspaper: ~7 rows (approximately)
 INSERT INTO `newspaper` (`id`, `title`, `subtitle`, `body`, `titletype`, `subtitletype`) VALUES
@@ -39,7 +39,7 @@ INSERT INTO `newspaper` (`id`, `title`, `subtitle`, `body`, `titletype`, `subtit
 CREATE TABLE IF NOT EXISTS `newspaper_motd` (
   `id` int DEFAULT NULL,
   `message` text
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+);
 
 -- Dumping data for table maindata.newspaper_motd: ~0 rows (approximately)
 INSERT INTO `newspaper_motd` (`id`, `message`) VALUES
